@@ -1,64 +1,58 @@
-# ⚙️ Decoupled Multi-Agent RAG System for Industrial Machinery Troubleshooting & K3 Compliance
+# ⚙️ Multi-Agent RAG System for Industrial Machine Troubleshooting
 
-## 📌 Ringkasan Proyek (Executive Summary)
+Sistem RAG (Retrieval-Augmented Generation) berbasis Multi-Agent cerdas yang dirancang untuk membantu teknisi dan operator manufaktur (khususnya sektor industri Karawang seperti KIIC, EJIP, & Suryacipta) dalam melakukan *troubleshooting* kerusakan mesin serta penerapan standar K3 (Keselamatan dan Kesehatan Kerja).
 
-**Decoupled Multi-Agent RAG System** ini adalah solusi berbasis Inteligensi Buatan (AI) cerdas yang dirancang khusus untuk membantu teknisi, *maintenance engineer*, dan operator di kawasan industri manufaktur (seperti kawasan KIIC, EJIP, dan Suryacipta di Karawang). 
-
-Sistem ini menggabungkan teknik **Retrieval-Augmented Generation (RAG)** dengan **Arsitektur Multi-Agent**, berfungsi sebagai asisten interaktif yang dapat mendiagnosis kode kerusakan mesin secara presisi, memberikan panduan *troubleshooting* step-by-step, serta memvalidasi kepatuhan prosedur **Keselamatan dan Kesehatan Kerja (K3)** secara otomatis.
+Sistem ini dibangun dengan arsitektur **Decoupled** (backend dan frontend terpisah) yang efisien, handal, dan dapat dijalankan di lingkungan *hardware* terbatas.
 
 ---
 
-## 💡 Latar Belakang & Masalah yang Diselesaikan
+## 🏗️ Arsitektur Sistem
 
-Di lingkungan pabrik manufaktur modern, penanganan *downtime* mesin yang cepat dan aman adalah prioritas utama. Masalah yang sering dihadapi di lapangan meliputi:
-1. **Dokumentasi SOP yang Tebal & Terpisah**: Manual book mesin (seperti Fanuc, Sumitomo, Komatsu, Yaskawa) sering kali dalam bentuk dokumen cetak ratusan halaman yang lambat dipahami saat situasi darurat.
-2. **Risiko Kecelakaan Kerja (K3)**: Penanganan masalah teknis sering kali mengabaikan langkah keselamatan mendasar seperti penggunaan APD wajib atau prosedur *Lockout/Tagout* (LOTO).
-3. **Pencarian Kata Kunci Baku**: Mesin pencari konvensional gagal memahami konteks bahasa alami teknisi di lapangan yang sering kali hanya mendeskripsikan gejala fisik kerusakan.
+Sistem ini terdiri dari dua komponen utama yang berkomunikasi melalui REST API:
 
-**Solusi Kami:** Sistem ini memproses kueri bahasa alami, melakukan *semantic search* pada vektor dokumen SOP internal, lalu menyusun jawaban yang mencakup identifikasi masalah, APD wajib, dan langkah perbaikan yang telah divalidasi oleh agen penilai keselamatan.
-
----
-
-## 🎯 Fungsi Utama Sistem
-
-1. **Pencarian Semantik Berbasis Vektor (Semantic Retrieval)**
-   * Memahami maksud kueri pengguna meskipun kueri tidak menyebutkan kode error secara tepat (misalnya: hanya menyebutkan gejala *"mesin panas dan bau sangit"*).
-
-2. **Multi-Agent Collaborative Pipeline**
-   * **Router Agent**: Menganalisis kueri masuk untuk menentukan apakah pertanyaan memerlukan dokumen SOP internal (`INTERNAL_RAG`) atau obrolan umum (`GENERAL_CHAT`).
-   * **Retriever Agent**: Mengambil konteks dokumen paling relevan dari database vektor ChromaDB secara *real-time*.
-   * **Synthesizer Agent (LLM Engine)**: Menyusun instruksi penanganan teknis yang ringkas, berurutan, dan mudah dipahami oleh teknisi lapangan.
-   * **Critic Agent (Guardrail K3)**: Bertindak sebagai pengawas keselamatan. Agen ini memeriksa jawaban dari Synthesizer untuk memastikan komponen APD dan prosedur K3 (seperti LOTO) sudah disertakan sebelum diberikan kepada pengguna.
-
-3. **Arsitektur Decoupled (Terpisah & Skalabel)**
-   * **Backend API (FastAPI)**: Menyediakan RESTful API endpoint untuk menangani seluruh komputasi AI, pencarian vektor, dan validasi agen.
-   * **Frontend UI (Streamlit)**: Menyediakan antarmuka obrolan (*Chat Interface*) yang responsif dan mudah digunakan oleh operator.
+1. **Backend (REST API - FastAPI)**: Port `8000`
+   * **Orchestration**: Multi-Agent System (Router Agent, Retriever, Synthesizer, Critic Agent).
+   * **Vector Store**: ChromaDB (Persisted Store).
+   * **Embedding Model**: `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2` (Local HuggingFace model).
+   * **LLM Engine**: Google Gemini API (`gemini-3.6-flash`).
+2. **Frontend (User Interface - Streamlit)**: Port `8501`
+   * Menampilkan antarmuka obrolan interaktif untuk input kueri error/gejala mesin.
+   * Menampilkan instruksi K3, APD wajib, serta solusi teknis *step-by-step*.
 
 ---
 
-## 🏗️ Arsitektur & Tech Stack
+## 🛠️ Tech Stack
+
+* **Language**: Python 3.10+
+* **Backend Framework**: FastAPI, Uvicorn, Pydantic
+* **Frontend Framework**: Streamlit
+* **Vector Database**: ChromaDB
+* **LLM & Embeddings**: Google Gemini API, Sentence-Transformers (HuggingFace)
+* **Data Format**: Structured JSON Datasets (SOP Sumitomo, Komatsu, Fanuc, Yaskawa, Atlas Copco)
+
+---
+
+## 🚀 Fitur Utama
+
+* 🤖 **Multi-Agent Routing**: Otomatis membedakan kueri spesifik SOP mesin internal (`INTERNAL_RAG`) dan pertanyaan umum (`GENERAL_CHAT`).
+* 🛡️ **Critic Agent (K3 Validation)**: Memvalidasi bahwa setiap langkah perbaikan selalu menyertakan instruksi APD wajib dan prosedur K3 (seperti LOTO / Lockout-Tagout).
+* 🔍 **Semantic Search**: Pencarian berbasis embedding vektor untuk menangkap maksud kueri pengguna meskipun menggunakan kosa kata yang bervariasi.
+* ⚡ **Decoupled Architecture**: Skalabel dan siap di-deploy secara terpisah ke cloud platform.
+
+---
+
+## 📂 Struktur Proyek
 
 ```text
-[ User Query ]
-      │
-      ▼
-[ Streamlit UI (Port 8501) ] ── (HTTP Request / JSON) ──► [ FastAPI Server (Port 8000) ]
-                                                                   │
-                                                          ┌────────┴────────┐
-                                                          ▼                 ▼
-                                                   [ Router Agent ]  [ General LLM ]
-                                                          │
-                                                (If INTERNAL_RAG)
-                                                          │
-                                                          ▼
-                                                  [ ChromaDB Vector Store ]
-                                                          │
-                                                 (Context Retrieved)
-                                                          │
-                                                          ▼
-                                                [ Synthesizer Agent ]
-                                                          │
-                                                          ▼
-                                                  [ Critic Agent (K3) ]
-                                                          │
-[ Streamlit UI (Rendered Output) ] ◄── (JSON Response) ───┘
+.
+├── api/
+│   └── main.py              # Endpoint REST API FastAPI (/api/v1/chat)
+├── data/
+│   └── sop_mesin.json       # Dataset SOP troubleshooting mesin manufaktur
+├── src/
+│   ├── graph.py             # Alur alur logika Multi-Agent (Router, Synthesizer, Critic)
+│   └── ingest.py            # Script embedding & penyimpan data JSON ke ChromaDB
+├── app.py                   # Aplikasi Web Frontend berbasis Streamlit
+├── requirements.txt         # Daftar dependensi Python
+├── .env.example             # Contoh file konfigurasi environment
+└── README.md                # Dokumentasi proyek
