@@ -1,0 +1,18 @@
+# Virtual Environment
+.venv/
+venv/
+ENV/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+
+# Secret / API Keys (SANGAT PENTING!)
+.env
+
+# ChromaDB Database Local (biarkan terbuat otomatis saat build)
+chromadb_store/
+
+# IDE
+.vscode/
+.idea/

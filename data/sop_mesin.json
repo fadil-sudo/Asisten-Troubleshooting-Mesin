@@ -1,0 +1,70 @@
+[
+  {
+    "id": "ERR-KRW-INJ-001",
+    "nama_mesin": "Sumitomo Heavy Industries SE180EV (Injection Molding)",
+    "kategori": "Termal & Hidrolik",
+    "kode_error": "E-502 TEMP OVERHEAT",
+    "gejala": "Suhu Barrel Zone 3 melonjak melebihi setpoint (di atas 240°C), plastik meleleh abnormal dan tercium bau sangit di area molding.",
+    "penyebab": "Thermocouple kabel terlepas, Solid State Relay (SSR) short circuit, atau bimetal pendingin tersumbat.",
+    "solusi_langkah_demi_langkah": [
+      "Tekan tombol Emergency Stop dan matikan heater zone melalui HMI.",
+      "Lakukan Lockout/Tagout (LOTO) pada panel listrik utama mesin injection molding.",
+      "Gunakan sarung tangan tahan panas, buka pelindung barrel dan periksa kabel thermocouple Zone 3.",
+      "Ukur resistansi SSR dengan multimeter (pastikan tidak ada kontinyuitas saat sinyal trigger OFF).",
+      "Jika SSR rusak, lakukan penggantian modul SSR 40A."
+    ],
+    "apd_wajib": ["Sarung Tangan Tahan Panas (Heat Resistant)", "Kacamata Safety", "Sepatu Safety K3"],
+    "tingkat_bahaya": "Tinggi"
+  },
+  {
+    "id": "ERR-KRW-STP-002",
+    "nama_mesin": "Komatsu OBS-80 Metal Stamping Press",
+    "kategori": "Mekanis & Pneumatik",
+    "kode_error": "ALARM 302 OVERLOAD CLUTCH",
+    "gejala": "Slide press berhenti di Bottom Dead Center (BDC), kopling udara selip dan buzzer alarm berbunyi keras.",
+    "penyebab": "Ketebalan plat sheet metal melebihi toleransi die, atau tekanan udara suplai ke air clutch drop di bawah 4.0 Bar.",
+    "solusi_langkah_demi_langkah": [
+      "Pastikan operator keluar dari area bahaya die (danger zone).",
+      "Tekan tombol Air Release Valve untuk membuang jebakan udara clutch.",
+      "Ukur tekanan angin masuk pada FRL unit (Filter-Regulator-Lubricator) di samping mesin.",
+      "Gunakan inching mode (manual jog) untuk menaikkan slide secara perlahan kembali ke Top Dead Center (TDC).",
+      "Keluarkan benda kerja yang tersangkut menggunakan tang capit pelindung (hand tool safety)."
+    ],
+    "apd_wajib": ["Pelindung Telinga (Earplug/Earmuff)", "Sarung Tangan Cut-Resistant (Anti Gores)", "Sepatu Safety K3"],
+    "tingkat_bahaya": "Tinggi"
+  },
+  {
+    "id": "ERR-KRW-CNC-003",
+    "nama_mesin": "Fanuc Robodrill α-D21MiB5",
+    "kategori": "Kelistrikan & Spindle",
+    "kode_error": "SPINDLE ALARM 04 (OVERCURRENT)",
+    "gejala": "Spindle utama mendadak berhenti saat proses roughing milling aluminum die cast, indikator amplifier spindle menyala merah.",
+    "penyebab": "Beban pemotongan terlalu berat (feedrate terlalu tinggi), karter pendingin (coolant) tersumbat serpihan gram besi, atau motor winding lembap.",
+    "solusi_langkah_demi_langkah": [
+      "Hentikan siklus pemotongan (Feed Hold) dan reset program CNC.",
+      "Matikan main breaker listrik (LOTO) dan periksa kipas pendingin di belakang enclosure motor spindle.",
+      "Bersihkan akumulasi gram/chip aluminium pada nozel coolant dan filter tank.",
+      "Cek impedansi gulungan motor spindle dengan Megger Tester.",
+      "Kurangi Feed Rate 15% pada program G-Code sebelum menjalankan ulang (restart)."
+    ],
+    "apd_wajib": ["Kacamata Safety (Anti Serpihan Gram)", "Sepatu Safety K3", "Sarung Tangan ESD"],
+    "tingkat_bahaya": "Sedang"
+  },
+  {
+    "id": "ERR-KRW-ROB-004",
+    "nama_mesin": "Yaskawa Motoman AR1440 (Welding Robot)",
+    "kategori": "Otomasi & Robotik",
+    "kode_error": "ALARM 4107 OUT OF RANGE",
+    "gejala": "Lengan robot berhenti mendadak saat melakukan pengelasan seam spot rangka komponen mobil, indikator Teach Pendant menunjukkan error sumbu S/U.",
+    "penyebab": "Interference batas mekanis (soft limit eksternal tersenggol), kabel encoder tertekuk, atau nilai pengelasan terdeteksi *arc fail*.",
+    "solusi_langkah_demi_langkah": [
+      "Alihkan mode robot dari AUTO ke TEACH mode pada kontroler YRC1000.",
+      "Tekan tombol Enable Switch pada Teach Pendant secara perlahan.",
+      "Gunakan pergerakan Jog Manual (Joint Axis) untuk menjauhkan torch las dari fixture jig.",
+      "Periksa kondisi kabel fleksibel pencatu daya servo robot dari keausan atau patah.",
+      "Lakukan *Alarm Reset* dan kalibrasi posisi asal (Home Position Calibration) bila posisi komutasi geser."
+    ],
+    "apd_wajib": ["Kacamata Safety / Topeng Las (Auto-Darkening)", "Sarung Tangan Kulit Industri", "Sepatu Safety K3"],
+    "tingkat_bahaya": "Tinggi"
+  }
+]
